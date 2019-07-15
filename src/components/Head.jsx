@@ -1,5 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import store from '../store';
+import {getAddTodoItemAction} from '../store/actionCreators';
 
 class Head extends React.Component { 
   constructor(props) {
@@ -7,14 +8,9 @@ class Head extends React.Component {
     this.todoInputRef = React.createRef();
   }
 
-  static propTypes = {
-    addTodoItem: PropTypes.func.isRequired,
-  }
-
-
   render() {
     return (
-        <div class="todo-header">
+        <div className="todo-header">
             <input ref={this.todoInputRef} type="text" placeholder="请输入今天的任务清单，按回车键确认" onKeyUp={(e)=>this.addTodoItem(e)}/>
         </div>
     );
@@ -27,7 +23,8 @@ class Head extends React.Component {
         alert("input is null");
         return;
       }
-      this.props.addTodoItem(curVal);
+      const action = getAddTodoItemAction(curVal);
+      store.dispatch(action);
       this.todoInputRef.current.value = "";
     }
   }

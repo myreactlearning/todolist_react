@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import store from '../store';
+import {getDelItemByTodoIdAction, getChangeTodoFinishedAction} from '../store/actionCreators';
 
 class Item extends React.Component { 
   constructor(props) {
@@ -11,9 +13,7 @@ class Item extends React.Component {
   }
 
   static propTypes = {
-    todo: PropTypes.object.isRequired,
-    delTodoItem: PropTypes.func.isRequired,
-    changeTodoFinished: PropTypes.func.isRequired
+    todo: PropTypes.object.isRequired
   }
 
   render() {
@@ -28,7 +28,7 @@ class Item extends React.Component {
           <input type="checkbox" checked={todo.finished?true:false} onChange={()=>this.changeTodoFinished(todo.id)} />
           <span>{todo.title}</span>
         </label>
-        <button class="btn btn-warning" style={{display: showDelBtn?'block':'none'}}
+        <button className="btn btn-warning" style={{display: showDelBtn?'block':'none'}}
             onClick={()=>this.delTodoItem(todo.id)}>删除</button>
       </li>
     );
@@ -41,11 +41,14 @@ class Item extends React.Component {
   } 
 
   delTodoItem(todoId) {
-      this.props.delTodoItem(todoId);
+     const action = getDelItemByTodoIdAction(todoId);
+     store.dispatch(action);
+
   }
 
   changeTodoFinished(todoId) {
-      this.props.changeTodoFinished(todoId);
+     const action = getChangeTodoFinishedAction(todoId);
+     store.dispatch(action);
   }
 
 
